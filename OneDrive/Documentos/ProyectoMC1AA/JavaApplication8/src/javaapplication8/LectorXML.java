@@ -8,7 +8,7 @@ package javaapplication8;
  *
  * @author alema
  */
-public class Clase {
+public class LectorXML {
     
     private String nombre;
 }
