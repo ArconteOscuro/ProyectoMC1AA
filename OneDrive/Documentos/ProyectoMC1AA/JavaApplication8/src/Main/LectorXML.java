@@ -59,7 +59,7 @@ public class LectorXML {
 
         } catch (IOException | NumberFormatException | ParserConfigurationException | DOMException | SAXException e) {
             // Si la carlitos, ponemos un mensaje para saber que puchis xdxd
-            System.out.println("❌ Error leyendo XML: " + e.getMessage());
+            System.out.println("Error leyendo XML: " + e.getMessage());
             return false; // Y decimos que no la hicimos bien
         }
     }

@@ -18,38 +18,25 @@ public class JavaApplication8 {
             String ruta = scanner.nextLine();
 
             if (LectorXML.cargarDesdeXML(ruta, tabla)) {
-                System.out.println("XML subido correctamente papu.");
+                System.out.println("XML subido correctamente.");
             } else {
-                System.out.println("No subiste correctamente papu el XML.");
+                System.out.println("No subiste correctamente el XML.");
                 return;
             }
         } else {
             tabla.entradaManual();
         }
 
-        // Se genera la tabla de verdad
+        // Se imprime la tabla de verdad
         tabla.imprimir();
 
-        // Acá se genera la función booleana canónica
-        String canonica = Simplificador.obtenerFuncionCanonica(
-            tabla.getMatriz(),
-            tabla.getNombres(),
-            tabla.getCantidadVars()
-        );
-        System.out.println("\n🧮 Función Canónica:\n" + canonica);
-
-        // Se simplifica la ecuación va
-        String simplificada = Simplificador.simplificar(
+        // Se imprime el mapa de Karnaugh
+        Mapita.imprimirMapaKarnaugh(
             tabla.getMatriz(),
             tabla.getCantidadVars(),
             tabla.getNombres()
         );
-        System.out.println("\n🧪 Función Simplificada:\n" + simplificada);
-
-        // Se hace el calculo de compuertas necesarias para el circuito
-        Simplificador.contarCompuertas(simplificada);
 
         scanner.close();
     }
 }
-
