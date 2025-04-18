@@ -1,15 +1,13 @@
 package Main;
 
-// Este archivo se llama Tabla_De_Verdad.java, así que la clase también debe llamarse igual (Ya la regue cuando me confundí xd con una mayuscula y no me corria)
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Tabla_De_Verdad {
 
-    private int[][] matriz; // Aquí voy a guardar la tabla como tal
-    private ArrayList<String> nombres; // Aquí pongo cómo se llaman las variables
-    private int cantidadVars; // Para saber cuántas variables vamos a usar
+    private int[][] matriz;
+    private ArrayList<String> nombres;
+    private int cantidadVars;
 
     public Tabla_De_Verdad() {
         matriz = null;
@@ -20,45 +18,39 @@ public class Tabla_De_Verdad {
     public void entradaManual() {
         Scanner scanner = new Scanner(System.in);
 
-        // Pregunto cuántas variables va a querer el usuario
-        System.out.print("Cuántas variables va a usar (mínimo 2 y máximo 5): ");
+        System.out.print("¿Cuántas variables vas a usar, recordá que son de 2-5: ");
         cantidadVars = scanner.nextInt();
-        scanner.nextLine(); // Pongo esto xd en el video del yiutu vi que se ponía
+        scanner.nextLine();
 
-        // Validación, para que este condicionado xd
         if (cantidadVars < 2 || cantidadVars > 5) {
             System.out.println("Número no válido, debe ser entre 2 y 5.");
             return;
         }
 
-        // Aquí se colocan los nombres de cada variable
         for (int i = 0; i < cantidadVars; i++) {
-            System.out.print("Nombre de la variable " + (i + 1) + ": ");
+            System.out.print("Nombre que le vas a poner a la variable " + (i + 1) + ": ");
             String nombre = scanner.nextLine();
             nombres.add(nombre);
         }
 
-        int filas = (int) Math.pow(2, cantidadVars); // Total de combinaciones
-        matriz = new int[filas][cantidadVars + 1]; // La +1 es para la salida (f1)
+        int filas = (int) Math.pow(2, cantidadVars);
+        matriz = new int[filas][cantidadVars + 1];
 
-        // Lleno las combinaciones de 0 y 1 para cada variable
         for (int col = 0; col < cantidadVars; col++) {
-            int contar = 0;
-            int valor = 0;
+            int contar = 0, valor = 0;
             int cambioCada = (int) Math.pow(2, cantidadVars - col - 1);
 
             for (int fila = 0; fila < filas; fila++) {
                 matriz[fila][col] = valor;
                 contar++;
                 if (contar == cambioCada) {
-                    valor = (valor == 0) ? 1 : 0; // cambio de 0 a 1 o de 1 a 0
+                    valor = (valor == 0) ? 1 : 0;
                     contar = 0;
                 }
             }
         }
 
-        // Ahora se piden los valores de salida para cada combinación
-        System.out.println("\nAhora ingrese los valores de salida (solo 0 o 1):");
+        System.out.println("\nAhora pone los valores de salida, recordá solo 0 o 1:");
 
         for (int i = 0; i < filas; i++) {
             while (true) {
@@ -75,48 +67,46 @@ public class Tabla_De_Verdad {
                         matriz[i][cantidadVars] = salida;
                         break;
                     } else {
-                        System.out.println("Solo se acepta 0 o 1, prueba de nuevo.");
+                        System.out.println("Solo se acepta 0 o 1.");
                     }
                 } else {
-                    System.out.println("Eso no es un número válido (debe ser 0 o 1).");
-                    scanner.next(); // Limpia lo que metieron mal
+                    System.out.println("Eso no es un número válido (0 o 1).");
+                    scanner.next();
                 }
             }
         }
     }
 
-    // Devuelve la tabla generada
     public int[][] getMatriz() {
         return matriz;
     }
 
-    // Devuelve los nombres de las variables que metió el usuario
     public ArrayList<String> getNombres() {
         return nombres;
     }
 
-    // Devuelve cuántas variables se están usando
     public int getCantidadVars() {
         return cantidadVars;
     }
 
-    // Muestra la tabla completita
-    public void imprimir() {
-        System.out.println("\nAquí va la tabla de verdad:");
+    public void cargarDesdeXML(ArrayList<String> nombres, int[][] matriz) {
+        this.nombres = nombres;
+        this.matriz = matriz;
+        this.cantidadVars = nombres.size();
+    }
 
-        // Encabezados
+    public void imprimir() {
+        System.out.println("\nAcá va la tabla de verdad:");
         for (String nombre : nombres) {
             System.out.print(nombre + "\t");
         }
         System.out.println("f1");
 
-        // Línea de separación
         for (int i = 0; i < cantidadVars; i++) {
             System.out.print("----\t");
         }
         System.out.println("----");
 
-        // Datos
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j <= cantidadVars; j++) {
                 System.out.print(matriz[i][j] + "\t");
