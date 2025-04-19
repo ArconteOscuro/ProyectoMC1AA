@@ -37,6 +37,25 @@ public class JavaApplication8 {
             tabla.getNombres()
         );
 
+        // Se muestra la función canónica
+        String canonica = Simplificador.obtenerFuncionCanonica(
+            tabla.getMatriz(),
+            tabla.getNombres(),
+            tabla.getCantidadVars()
+        );
+        System.out.println("\nFunción Booleana Canónica: " + canonica);
+
+        // Se muestra la función simplificada
+        String simplificada = Simplificador.simplificar(
+            tabla.getMatriz(),
+            tabla.getCantidadVars(),
+            tabla.getNombres()
+        );
+        System.out.println("Función Simplificada: " + simplificada);
+
+        // Se muestra el conteo de compuertas
+        Simplificador.contarCompuertas(simplificada);
+
         scanner.close();
     }
 }
