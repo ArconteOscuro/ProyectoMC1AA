@@ -109,6 +109,8 @@ public class Simplificador {
         }
 
         or = terminos.length > 1 ? terminos.length - 1 : 0;
+      
+   
 
         return "\n Compuertas necesarias:\n"
              + "NOT (¬): " + not + "\n"
