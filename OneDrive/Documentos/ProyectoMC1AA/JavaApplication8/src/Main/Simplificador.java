@@ -6,6 +6,7 @@ import java.util.Set;
 
 public class Simplificador {
 
+    //  Forma canónica
     public static String obtenerFuncionCanonica(int[][] tabla, ArrayList<String> nombres, int cantidadVars) {
         StringBuilder canonica = new StringBuilder();
         boolean primero = true;
@@ -14,7 +15,7 @@ public class Simplificador {
             if (tabla[i][cantidadVars] == 1) {
                 if (!primero) canonica.append(" + ");
                 for (int j = 0; j < cantidadVars; j++) {
-                    canonica.append((tabla[i][j] == 0) ? nombres.get(j) + "'" : nombres.get(j));
+                    canonica.append(tabla[i][j] == 0 ? nombres.get(j) + "'" : nombres.get(j));
                 }
                 primero = false;
             }
@@ -23,6 +24,7 @@ public class Simplificador {
         return canonica.length() == 0 ? "0" : canonica.toString();
     }
 
+    
     public static String simplificar(int[][] tabla, int cantidadVars, ArrayList<String> nombres) {
         ArrayList<String> minterms = new ArrayList<>();
         for (int[] fila : tabla) {
@@ -43,15 +45,16 @@ public class Simplificador {
             Set<String> siguiente = new HashSet<>();
             Set<String> usados = new HashSet<>();
 
-            for (String a : implicantes) {
-                for (String b : implicantes) {
-                    if (a.equals(b)) continue;
-
+            ArrayList<String> lista = new ArrayList<>(implicantes);
+            for (int i = 0; i < lista.size(); i++) {
+                for (int j = i + 1; j < lista.size(); j++) {
+                    String a = lista.get(i);
+                    String b = lista.get(j);
                     int dif = 0, pos = -1;
-                    for (int i = 0; i < a.length(); i++) {
-                        if (a.charAt(i) != b.charAt(i)) {
+                    for (int k = 0; k < a.length(); k++) {
+                        if (a.charAt(k) != b.charAt(k)) {
                             dif++;
-                            pos = i;
+                            pos = k;
                         }
                     }
 
@@ -74,6 +77,7 @@ public class Simplificador {
 
         } while (cambio);
 
+       
         ArrayList<String> resultado = new ArrayList<>();
         for (String imp : implicantes) {
             StringBuilder term = new StringBuilder();
@@ -81,28 +85,32 @@ public class Simplificador {
                 if (imp.charAt(i) == '-') continue;
                 term.append(imp.charAt(i) == '1' ? nombres.get(i) : nombres.get(i) + "'");
             }
-            resultado.add(term.toString());
+            if (term.length() > 0) resultado.add(term.toString());
         }
 
-        return resultado.isEmpty() ? "0" : String.join(" + ", resultado);
+        return resultado.isEmpty() ? "1" : String.join(" + ", resultado);
     }
 
+    
     public static String contarCompuertas(String expresion) {
         int not = 0, and = 0, or;
 
         String[] terminos = expresion.split("\\+");
         for (String termino : terminos) {
             int letras = 0;
-            for (char c : termino.trim().toCharArray()) {
-                if (Character.isLetter(c)) letras++;
-                if (c == '\'') not++;
+            char[] chars = termino.trim().toCharArray();
+            for (int i = 0; i < chars.length; i++) {
+                if (Character.isLetter(chars[i])) letras++;
+                if (i + 1 < chars.length && chars[i + 1] == '\'') {
+                    not++;
+                }
             }
             if (letras > 1) and += letras - 1;
         }
 
         or = terminos.length > 1 ? terminos.length - 1 : 0;
 
-        return "\n🔌 Compuertas necesarias:\n"
+        return "\n Compuertas necesarias:\n"
              + "NOT (¬): " + not + "\n"
              + "AND (∧): " + and + "\n"
              + "OR  (∨): " + or + "\n"

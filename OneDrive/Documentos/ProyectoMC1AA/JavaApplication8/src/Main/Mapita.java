@@ -4,11 +4,10 @@ import java.util.ArrayList;
 
 public class Mapita {
 
-    // ✅ Este método genera el Mapa de Karnaugh como texto para GUI
     public static String generarMapaKarnaugh(int[][] tabla, int numVars, ArrayList<String> vars) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\nMapa de Karnaugh:\n");
+        sb.append("\n Mapa de Karnaugh:\n\n");
 
         if (numVars < 2 || numVars > 5) {
             sb.append("No se puede generar mapa para ").append(numVars).append(" variables.\n");
@@ -21,20 +20,22 @@ public class Mapita {
         ArrayList<String> rowLabels = generarGrayCode(rowVars);
         ArrayList<String> colLabels = generarGrayCode(colVars);
 
-        sb.append("Variables:\n");
-        sb.append("Filas: ").append(vars.subList(0, rowVars)).append("\n");
-        sb.append("Columnas: ").append(vars.subList(rowVars, numVars)).append("\n\n");
+        sb.append(" Variables:\n");
+        sb.append("   Filas: ").append(vars.subList(0, rowVars)).append("\n");
+        sb.append("   Columnas: ").append(vars.subList(rowVars, numVars)).append("\n\n");
 
-        // Encabezado del mapa
-        sb.append("     ");
+        
+        sb.append("       ");
         for (String col : colLabels) {
-            sb.append(col).append("  ");
+            sb.append(String.format("%-5s", col));
         }
         sb.append("\n");
+        sb.append("     " + "-".repeat(colLabels.size() * 5));
+        sb.append("\n");
 
-        // Recorremos cada fila
+       
         for (String row : rowLabels) {
-            sb.append(row).append(" | ");
+            sb.append(String.format("%-3s | ", row));
             for (String col : colLabels) {
                 String[] combinacionFinal = new String[numVars];
                 int index = 0;
@@ -48,7 +49,7 @@ public class Mapita {
                 }
 
                 int salida = buscarValor(tabla, combinacionFinal);
-                sb.append(salida).append("   ");
+                sb.append(String.format("%-5s", salida));
             }
             sb.append("\n");
         }
@@ -56,7 +57,6 @@ public class Mapita {
         return sb.toString();
     }
 
-    // Busca el valor de salida en la tabla para una combinación binaria
     private static int buscarValor(int[][] tabla, String[] bin) {
         for (int[] fila : tabla) {
             boolean match = true;
@@ -71,7 +71,6 @@ public class Mapita {
         return 0;
     }
 
-    // Genera código Gray para etiquetas del mapa
     private static ArrayList<String> generarGrayCode(int n) {
         ArrayList<String> grayCodes = new ArrayList<>();
         for (int i = 0; i < (1 << n); i++) {
