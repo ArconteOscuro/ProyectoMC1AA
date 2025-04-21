@@ -1,7 +1,6 @@
 package Main;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Tabla_De_Verdad {
 
@@ -15,26 +14,13 @@ public class Tabla_De_Verdad {
         cantidadVars = 0;
     }
 
-    public void entradaManual() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("¿Cuántas variables vas a usar, recordá que son de 2-5: ");
-        cantidadVars = scanner.nextInt();
-        scanner.nextLine();
-
-        if (cantidadVars < 2 || cantidadVars > 5) {
-            System.out.println("Número no válido, debe ser entre 2 y 5.");
-            return;
-        }
-
-        for (int i = 0; i < cantidadVars; i++) {
-            System.out.print("Nombre que le vas a poner a la variable " + (i + 1) + ": ");
-            String nombre = scanner.nextLine();
-            nombres.add(nombre);
-        }
+    
+    public void generarTabla(ArrayList<String> nombres) {
+        this.nombres = nombres;
+        this.cantidadVars = nombres.size();
 
         int filas = (int) Math.pow(2, cantidadVars);
-        matriz = new int[filas][cantidadVars + 1];
+        matriz = new int[filas][cantidadVars + 1]; // +1 para la salida
 
         for (int col = 0; col < cantidadVars; col++) {
             int contar = 0, valor = 0;
@@ -49,31 +35,18 @@ public class Tabla_De_Verdad {
                 }
             }
         }
+    }
 
-        System.out.println("\nAhora pone los valores de salida, recordá solo 0 o 1:");
+    
+    public void setSalidas(int[] salidas) {
+        int filasEsperadas = (int) Math.pow(2, cantidadVars);
 
-        for (int i = 0; i < filas; i++) {
-            while (true) {
-                System.out.print("Para (");
-                for (int j = 0; j < cantidadVars; j++) {
-                    System.out.print(nombres.get(j) + "=" + matriz[i][j]);
-                    if (j != cantidadVars - 1) System.out.print(", ");
-                }
-                System.out.print(") → f1: ");
+        if (salidas.length != filasEsperadas) {
+            throw new IllegalArgumentException("Cantidad de salidas no coincide con la tabla de verdad.");
+        }
 
-                if (scanner.hasNextInt()) {
-                    int salida = scanner.nextInt();
-                    if (salida == 0 || salida == 1) {
-                        matriz[i][cantidadVars] = salida;
-                        break;
-                    } else {
-                        System.out.println("Solo se acepta 0 o 1.");
-                    }
-                } else {
-                    System.out.println("Eso no es un número válido (0 o 1).");
-                    scanner.next();
-                }
-            }
+        for (int i = 0; i < salidas.length; i++) {
+            matriz[i][cantidadVars] = salidas[i];
         }
     }
 

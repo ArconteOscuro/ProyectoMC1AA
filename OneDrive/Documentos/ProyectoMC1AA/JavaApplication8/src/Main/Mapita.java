@@ -1,67 +1,62 @@
-// @author Andrea Salazar
-
 package Main;
 
 import java.util.ArrayList;
 
 public class Mapita {
 
-    // Este método imprime el mapa de Karnaugh en consola
-    public static void imprimirMapaKarnaugh(int[][] tabla, int numVars, ArrayList<String> vars) {
-        System.out.println("\nMapa de Karnaugh:");
+    // ✅ Este método genera el Mapa de Karnaugh como texto para GUI
+    public static String generarMapaKarnaugh(int[][] tabla, int numVars, ArrayList<String> vars) {
+        StringBuilder sb = new StringBuilder();
 
-        // Solo aceptamos entre 2 y 5 variables porque más ya se vuelve muy confuso
+        sb.append("\nMapa de Karnaugh:\n");
+
         if (numVars < 2 || numVars > 5) {
-            System.out.println("No se puede generar mapa para " + numVars + " variables.");
-            return;
+            sb.append("No se puede generar mapa para ").append(numVars).append(" variables.\n");
+            return sb.toString();
         }
 
-        // Dividimos las variables en dos grupos, unas van como filas y otras como columnas
         int rowVars = numVars / 2;
         int colVars = numVars - rowVars;
 
-        ArrayList<String> rowLabels = generarGrayCode(rowVars);   // combinaciones de fila
-        ArrayList<String> colLabels = generarGrayCode(colVars);   // combinaciones de columna
+        ArrayList<String> rowLabels = generarGrayCode(rowVars);
+        ArrayList<String> colLabels = generarGrayCode(colVars);
 
-        // Mostramos qué variables se usaron en qué parte
-        System.out.println("Variables:");
-        System.out.println("Filas: " + vars.subList(0, rowVars));
-        System.out.println("Columnas: " + vars.subList(rowVars, numVars));
-        System.out.println();
+        sb.append("Variables:\n");
+        sb.append("Filas: ").append(vars.subList(0, rowVars)).append("\n");
+        sb.append("Columnas: ").append(vars.subList(rowVars, numVars)).append("\n\n");
 
-        // Imprimimos el encabezado del mapa (las columnas)
-        System.out.print("     ");
+        // Encabezado del mapa
+        sb.append("     ");
         for (String col : colLabels) {
-            System.out.print(col + "  ");
+            sb.append(col).append("  ");
         }
-        System.out.println();
+        sb.append("\n");
 
-        // Recorremos cada fila y combinamos con cada columna para buscar la salida
+        // Recorremos cada fila
         for (String row : rowLabels) {
-            System.out.print(row + " | ");
+            sb.append(row).append(" | ");
             for (String col : colLabels) {
                 String[] combinacionFinal = new String[numVars];
                 int index = 0;
 
-                // Ponemos los bits de la fila primero
                 for (int i = 0; i < rowVars; i++) {
                     combinacionFinal[index++] = String.valueOf(row.charAt(i));
                 }
 
-                // Luego los de la columna
                 for (int i = 0; i < colVars; i++) {
                     combinacionFinal[index++] = String.valueOf(col.charAt(i));
                 }
 
-                // Buscamos la salida que corresponde a esta combinación
                 int salida = buscarValor(tabla, combinacionFinal);
-                System.out.print(salida + "   ");
+                sb.append(salida).append("   ");
             }
-            System.out.println();
+            sb.append("\n");
         }
+
+        return sb.toString();
     }
 
-    // Compara una combinación binaria con las filas de la tabla para encontrar la salida
+    // Busca el valor de salida en la tabla para una combinación binaria
     private static int buscarValor(int[][] tabla, String[] bin) {
         for (int[] fila : tabla) {
             boolean match = true;
@@ -71,16 +66,16 @@ public class Mapita {
                     break;
                 }
             }
-            if (match) return fila[bin.length]; // cuando encontramos la combinación, devolvemos su salida
+            if (match) return fila[bin.length];
         }
-        return 0; // si no se encuentra, devolvemos 0 por defecto
+        return 0;
     }
 
-    // Genera una lista de combinaciones en código Gray para que el mapa tenga sentido
+    // Genera código Gray para etiquetas del mapa
     private static ArrayList<String> generarGrayCode(int n) {
         ArrayList<String> grayCodes = new ArrayList<>();
         for (int i = 0; i < (1 << n); i++) {
-            int gray = i ^ (i >> 1); // operación para convertir a Gray
+            int gray = i ^ (i >> 1);
             String bin = String.format("%" + n + "s", Integer.toBinaryString(gray)).replace(' ', '0');
             grayCodes.add(bin);
         }

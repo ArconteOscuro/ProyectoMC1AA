@@ -87,7 +87,7 @@ public class Simplificador {
         return resultado.isEmpty() ? "0" : String.join(" + ", resultado);
     }
 
-    public static void contarCompuertas(String expresion) {
+    public static String contarCompuertas(String expresion) {
         int not = 0, and = 0, or;
 
         String[] terminos = expresion.split("\\+");
@@ -102,10 +102,10 @@ public class Simplificador {
 
         or = terminos.length > 1 ? terminos.length - 1 : 0;
 
-        System.out.println("\n🔌 Compuertas necesarias:");
-        System.out.println("NOT (¬): " + not);
-        System.out.println("AND (∧): " + and);
-        System.out.println("OR  (∨): " + or);
-        System.out.println("Total: " + (not + and + or));
+        return "\n🔌 Compuertas necesarias:\n"
+             + "NOT (¬): " + not + "\n"
+             + "AND (∧): " + and + "\n"
+             + "OR  (∨): " + or + "\n"
+             + "Total: " + (not + and + or);
     }
 }
